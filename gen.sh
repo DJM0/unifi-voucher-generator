@@ -4,11 +4,6 @@
 pwd=`pwd`
 . $pwd/unifi-api.sh
 
-# Unifi connection infomation
-username=admin
-password=PASSWORD
-baseurl=https://CONTROLLERURL:8443
-
 # Generation settings
 time=60
 ammount=15

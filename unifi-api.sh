@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# Unifi connection infomation
+username=admin
+password=PASSWORD
+baseurl=https://CONTROLLERURL:8443
+
 cookie=/tmp/unifi_cookie
 
 curl_cmd="curl --sslv3 --silent --cookie ${cookie} --cookie-jar ${cookie} --insecure "
