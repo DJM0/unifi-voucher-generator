@@ -1,0 +1,36 @@
+body {
+    font-family:"sans-serif";
+    color:#444;
+}
+
+.line1 {
+    font-size:17px;
+}
+
+.line2 {
+    font-size:15px;
+}
+
+.line3 {
+    font-size:17px;
+    letter-spacing:2px;
+    padding-top:10px;
+}
+
+.voucher {
+    width: 250px;
+
+    margin-bottom:-1px;
+    margin-right:-1px;
+
+    padding-top:10px;
+    padding-left:15px;
+    padding-right:15px;
+    padding-bottom:10px;
+
+    float: left;
+
+    border-style:dashed;
+    border-width:1px;
+    border-color:#eee;
+}
