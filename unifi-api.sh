@@ -7,7 +7,7 @@ baseurl=https://CONTROLLERURL:8443
 
 cookie=/tmp/unifi_cookie
 
-curl_cmd="curl --sslv3 --silent --cookie ${cookie} --cookie-jar ${cookie} --insecure "
+curl_cmd="curl --silent --cookie ${cookie} --cookie-jar ${cookie} --insecure "
 
 unifi_requires() {
     if [ -z "$username" -o -z "$password" -o -z "$baseurl" ] ; then
