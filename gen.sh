@@ -40,6 +40,6 @@ echo "</body></html>" >> vouchers.html
 
 # Remove tmp
 if [ -e vouchers.tmp ]; then
-  echo "Removing old vouchers."
+  echo "Removing vouchers tmp file."
   rm vouchers.tmp
 fi
