@@ -6,12 +6,12 @@ pwd=`pwd`
 
 # Generation settings
 time=60
-ammount=15
+amount=15
 note="TEST"
 
 # Generate vouchers
 unifi_login
-voucherID=`unifi_create_voucher $time $ammount $note`
+voucherID=`unifi_create_voucher $time $amount $note`
 unifi_get_vouchers $voucherID > vouchers.tmp
 unifi_logout
 
@@ -22,8 +22,10 @@ line1="COMPANY WiFi Voucher"
 line2="60 minutes of use"
 
 # Build HTML
-
-rm vouchers.html
+if [ -e vouchers.html ]; then
+  echo "Removing old vouchers."
+  rm vouchers.html
+fi
 
 echo '<html><head><link rel="stylesheet" href="style.css" /></head><body>' >> vouchers.html
 
@@ -36,4 +38,8 @@ done
 
 echo "</body></html>" >> vouchers.html
 
-firefox vouchers.html
+# Remove tmp
+if [ -e vouchers.tmp ]; then
+  echo "Removing old vouchers."
+  rm vouchers.tmp
+fi
