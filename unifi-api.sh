@@ -7,7 +7,7 @@
 
 [ -f ./unifi_sh_env ] && . ./unifi_sh_env
 
-cookie=/tmp/unifi_cookie
+cookie=unifi_cookie_tmp
 
 curl_cmd="curl --tlsv1 --silent --cookie ${cookie} --cookie-jar ${cookie} --insecure "
 
@@ -44,6 +44,7 @@ unifi_login() {
 unifi_logout() {
     # logout
     ${curl_cmd} $baseurl/logout
+    rm $cookie
 }
 
 unifi_api() {
