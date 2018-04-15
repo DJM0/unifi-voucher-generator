@@ -1,18 +1,25 @@
-Generates UniFi vouchers using the controller API. CSS fully styleable and ready to print.
+# UniFi Voucher Generator
 
-This script can be run from any NIX machine that can see the UniFi controller.
+Generates UniFi Hotspot vouchers using the UniFi controller API ready for printing. Customise the design using CSS.
 
-1. Download the repo using Git.
-    git clone git://github.com/davidmaitland/unifi-voucher-generator.git
+This should work on any Linux/Mac machine that can reach the UniFi controller.
 
-2. Edit the "unifi-api.sh" with your controller's Username, Password and URL.
+**Apr 2018**: Still works on the UniFi 5.6.26 Controller.
 
-3. Edit the "gen.sh" script with your own varibles.
+## Setup
 
-4. Run the "gen.sh" script, which will connect to your controller, generate the keys and produce a vouchers.html ready to print.
+1. Clone the repo:
 
-Notes:
-- CSS is in the "style.css" file.
+```
+git clone https://github.com/davidmaitland/unifi-voucher-generator.git
+```
 
-Soon:
-- Interactive command line.
+2. Set the variables in `unifi-api.sh` with your controller's details (username, password, baseurl, site).
+
+3. Optionally customise the variables in `gen.sh` and the styles in `style.css`.
+
+## Run
+
+1. Run `./gen.sh`.
+
+2. Open `vouchers.html` and print!

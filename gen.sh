@@ -5,9 +5,12 @@ pwd=`pwd`
 . $pwd/unifi-api.sh
 
 # Generation settings
-time=60
-amount=15
-note="TEST"
+time=60 # Voucher time limit (minutes)
+amount=15 # New vouchers to generate
+
+# HTML Settings
+line1="WiFi Voucher"
+line2="Valid for 60 minutes"
 
 # Generate vouchers
 unifi_login
@@ -16,10 +19,6 @@ unifi_get_vouchers $voucherID > vouchers.tmp
 unifi_logout
 
 vouchers=`awk -F"[,:]" '{for(i=1;i<=NF;i++){if($i~/code\042/){print $(i+1)} } }' vouchers.tmp | sed 's/\"//g'`
-
-# HTML Settings
-line1="COMPANY WiFi Voucher"
-line2="60 minutes of use"
 
 # Build HTML
 if [ -e vouchers.html ]; then

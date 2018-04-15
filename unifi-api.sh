@@ -1,9 +1,10 @@
 #!/bin/sh
 
-#username=ubnt
-#password=ubnt
-#baseurl=https://unifi:8443
-#site=default
+# Controller connection settings
+username=ubnt
+password=ubnt
+baseurl=https://unifi:8443
+site=default # site=692ccbzc can be found from the dashboard URL: https://unifi.example.com/manage/site/692ccbzc/dashboard
 
 [ -f ./unifi_sh_env ] && . ./unifi_sh_env
 
@@ -179,4 +180,3 @@ unifi_list_sta() {
 
 
 unifi_requires
-
