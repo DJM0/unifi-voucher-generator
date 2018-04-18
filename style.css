@@ -1,36 +1,41 @@
 body {
-    font-family:"sans-serif";
-    color:#444;
-}
-
-.line1 {
-    font-size:17px;
-}
-
-.line2 {
-    font-size:15px;
-}
-
-.line3 {
-    font-size:17px;
-    letter-spacing:2px;
-    padding-top:10px;
+  color: #444;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .voucher {
-    width: 250px;
+  float: left;
 
-    margin-bottom:-1px;
-    margin-right:-1px;
+  margin: -1px 0 0 -1px;
+  padding: 10px 15px;
 
-    padding-top:10px;
-    padding-left:15px;
-    padding-right:15px;
-    padding-bottom:10px;
+  border: 1px dashed #ddd;
+}
 
-    float: left;
+.line1 {
+  display: inline-block;
 
-    border-style:dashed;
-    border-width:1px;
-    border-color:#eee;
+  max-width: 150px;
+
+  font-size: 17px;
+  line-height: 22px;
+}
+
+.line2 {
+  float: right;
+
+  margin: 2px 0 0 20px;
+
+  color: #777;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.line3 {
+  padding-top: 10px;
+
+  font-weight: lighter;
+  font-size: 28px;
+  line-height: 34px;
+  letter-spacing: 2px;
 }
