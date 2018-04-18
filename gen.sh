@@ -30,7 +30,7 @@ echo '<html><head><link rel="stylesheet" href="style.css" /></head><body>' >> vo
 
 for code in $vouchers
 do
-    line3=$code
+    line3=${code:0:5}" "${code:5:10}
     html='<div class="voucher"><div class="line1">'$line1'</div><div class="line2">'$line2'</div><div class="line3">'$line3'</div></div>'
     echo $html >> vouchers.html
 done
