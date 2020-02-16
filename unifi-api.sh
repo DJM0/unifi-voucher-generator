@@ -1,14 +1,12 @@
 #!/bin/sh
 
-# Controller connection settings
-username=ubnt
-password=ubnt
-baseurl=https://unifi:8443
-site=default # site=692ccbzc can be found from the dashboard URL: https://unifi.example.com/manage/site/692ccbzc/dashboard
+#username=ubnt
+#password=ubnt
+#baseurl=https://unifi:8443
+#site=default
+#[ -f ./unifi_sh_env ] && . ./unifi_sh_env
 
-[ -f ./unifi_sh_env ] && . ./unifi_sh_env
-
-cookie=unifi_cookie_tmp
+cookie=$(mktemp)
 
 curl_cmd="curl --tlsv1 --silent --cookie ${cookie} --cookie-jar ${cookie} --insecure "
 
@@ -18,7 +16,7 @@ named_args_to_payload() {
         if [ "${a##*=*}" = "" ] ; then
             k=`echo $a | cut -d = -f 1`
             v=`echo $a | cut -d = -f 2`
-            payload="${payload}, '$k':'$v'"
+            payload="${payload}, \"$k\":\"$v\""
         fi
     done
     echo ${payload}
@@ -39,13 +37,12 @@ unifi_requires() {
 
 unifi_login() {
     # authenticate against unifi controller
-    ${curl_cmd} --data "{'username':'$username', 'password':'$password'}" $baseurl/api/login
+    ${curl_cmd} --data "{\"username\":\"$username\", \"password\":\"$password\"}" $baseurl/api/login
 }
 
 unifi_logout() {
     # logout
     ${curl_cmd} $baseurl/logout
-    rm $cookie
 }
 
 unifi_api() {
@@ -74,7 +71,7 @@ unifi_authorize_guest() {
     minutes=$2
     other_payload=`named_args_to_payload "$@"`
 
-    ${curl_cmd} --data "json={'cmd':'authorize-guest', 'mac':'${mac}', 'minutes':${minutes}${other_payload}}" $baseurl/api/s/$site/cmd/stamgr
+    ${curl_cmd} --data "{\"cmd\":\"authorize-guest\", \"mac\":\"${mac}\", \"minutes\":${minutes}${other_payload}}" $baseurl/api/s/$site/cmd/stamgr
 }
 
 # cmd/stamgr
@@ -87,7 +84,7 @@ unifi_unauthorize_guest() {
 
     mac=$1
 
-    ${curl_cmd} --data "json={'cmd':'unauthorize-guest', 'mac':'${mac}'}" $baseurl/api/s/$site/cmd/stamgr
+    ${curl_cmd} --data "{\"cmd\":\"unauthorize-guest\", \"mac\":\"${mac}\"}" $baseurl/api/s/$site/cmd/stamgr
 }
 
 # cmd/stamgr
@@ -100,7 +97,7 @@ unifi_reconnect_sta() {
 
     mac=$1
 
-    ${curl_cmd} --data "json={'cmd':'kick-sta', 'mac':'${mac}'}" $baseurl/api/s/$site/cmd/stamgr
+    ${curl_cmd} --data "{\"cmd\":\"kick-sta\", \"mac\":\"${mac}\"}" $baseurl/api/s/$site/cmd/stamgr
 }
 
 # cmd/stamgr
@@ -113,7 +110,7 @@ unifi_block_sta() {
 
     mac=$1
 
-    ${curl_cmd} --data "json={'cmd':'block-sta', 'mac':'${mac}'}" $baseurl/api/s/$site/cmd/stamgr
+    ${curl_cmd} --data "{\"cmd\":\"block-sta\", \"mac\":\"${mac}\"}" $baseurl/api/s/$site/cmd/stamgr
 }
 
 unifi_backup() {
@@ -124,7 +121,7 @@ unifi_backup() {
     fi
 
     # ask controller to do a backup, response contains the path to the backup file
-    path=`$curl_cmd --data "json={'cmd':'backup'}" $baseurl/api/s/$site/cmd/system | sed -n 's/.*\(\/dl.*unf\).*/\1/p'`
+    path=`$curl_cmd --data "{\"cmd\":\"backup\"}" $baseurl/api/s/$site/cmd/backup | sed -n 's/.*\(\/dl.*unf\).*/\1/p'`
 
     # download the backup to the destinated output file
     $curl_cmd $baseurl$path -o $output
@@ -141,11 +138,11 @@ unifi_create_voucher() {
     minutes=$1
     n=$2
     other_payload=`named_args_to_payload "$@"`
-    token=`${curl_cmd} --data "json={'cmd':'create-voucher','expire':${minutes},'n':$n ${other_payload}}" $baseurl/api/s/$site/cmd/hotspot \
+    token=`${curl_cmd} --data "{\"cmd\":\"create-voucher\",\"expire\":${minutes},\"n\":$n ${other_payload}}" $baseurl/api/s/$site/cmd/hotspot \
         | sed -e 's/.*"create_time"\s*:\s*\([0-9]\+\).*/\1/'`
     echo "token=$token"
     if [ "$token" != "" ] ; then
-        ${curl_cmd} --data "json={'create_time':${token}}" $baseurl/api/s/$site/stat/voucher
+        ${curl_cmd} --data "{\"create_time\":${token}}" $baseurl/api/s/$site/stat/voucher
     fi
 }
 
@@ -158,9 +155,9 @@ unifi_get_vouchers() {
         return
     fi
     token=$1
-    [ "$token" != "" ] && other_payload="'create_time':${token}"
-    ${curl_cmd} --data "json={${other_payload}}" $baseurl/api/s/$site/stat/voucher
-    echo ${curl_cmd} --data "json={${other_payload}}" $baseurl/api/s/$site/stat/voucher
+    [ "$token" != "" ] && other_payload="\"create_time\":${token}"
+    ${curl_cmd} --data "{${other_payload}}" $baseurl/api/s/$site/stat/voucher
+    echo ${curl_cmd} --data "{${other_payload}}" $baseurl/api/s/$site/stat/voucher
 }
 
 # delete-voucher(id)
@@ -170,13 +167,41 @@ unifi_delete_voucher() {
         return
     fi
     id=$1
-    ${curl_cmd} --data "json={'cmd':'delete-voucher','_id':'${id}'}" $baseurl/api/s/$site/cmd/hotspot
+    ${curl_cmd} --data "{\"cmd\":\"delete-voucher\",\"_id\":\"${id}\"}" $baseurl/api/s/$site/cmd/hotspot
 }
 
 # stat/sta
 unifi_list_sta() {
-    ${curl_cmd} --data "json={}" $baseurl/api/s/$site/stat/sta
+    ${curl_cmd} --data "{}" $baseurl/api/s/$site/stat/sta
 }
 
+# upgrade device to the given firmware
+unifi_upgrade_external() {
+    if [ $# -lt 2 ] ; then
+	echo "Usage: $0 <mac> <firmware_url>"
+	return
+    fi
+
+    mac=$1
+    firmware_url=$2
+
+    ${curl_cmd} --data "{\"url\":\"${firmware_url}\", \"mac\":\"${mac}\"}" $baseurl/api/s/$site/cmd/devmgr/upgrade-external
+}
+
+# press upgrade button
+unifi_upgrade() {
+    if [ $# -lt 1 ] ; then
+	echo "Usage: $0 <mac>"
+	return
+    fi
+
+    mac=$1
+
+    ${curl_cmd} --data "{\"mac\":\"${mac}\"}" $baseurl/api/s/$site/cmd/devmgr/upgrade
+}
+
+unifi_list_devices() {
+    ${curl_cmd} --data "{}" $baseurl/api/s/$site/stat/device
+}
 
 unifi_requires

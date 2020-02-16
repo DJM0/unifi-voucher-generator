@@ -4,7 +4,7 @@ Generates UniFi Hotspot vouchers using the UniFi controller API ready for printi
 
 This should work on any Linux/Mac machine that can reach the UniFi controller.
 
-**Apr 2018**: Still works on the UniFi 5.6.26 Controller.
+**Feb 2020**: Now works with UniFi 5.12.35 Controller.
 
 ## Setup
 
