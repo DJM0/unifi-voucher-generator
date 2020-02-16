@@ -6,6 +6,8 @@ This should work on any Linux/Mac machine that can reach the UniFi controller.
 
 **Feb 2020**: Now works with UniFi 5.12.35 Controller.
 
+![Preview of generated output](preview.png)
+
 ## Setup
 
 1. Clone the repo:
