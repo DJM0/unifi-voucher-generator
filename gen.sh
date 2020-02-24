@@ -5,12 +5,12 @@ pwd=`pwd`
 . $pwd/unifi-api.sh
 
 # Generation settings
-time=60 # Voucher time limit (minutes)
-amount=15 # New vouchers to generate
+time=$1 # Voucher time limit (minutes)
+amount=$2 # New vouchers to generate
 
 # HTML Settings
 line1="WiFi Voucher"
-line2="Valid for 60 minutes"
+line2="Valid for $1 minutes"
 
 # Generate vouchers
 unifi_login
