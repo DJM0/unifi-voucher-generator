@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Files needed
 pwd=`pwd`
