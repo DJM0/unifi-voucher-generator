@@ -1,5 +1,4 @@
-#!/bin/sh
-
+#!/bin/bash
 # Files needed
 pwd=`pwd`
 . $pwd/unifi-api.sh
