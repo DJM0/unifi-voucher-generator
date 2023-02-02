@@ -205,5 +205,25 @@ unifi_upgrade() {
 unifi_list_devices() {
     ${curl_cmd} --data "{}" $baseurl/api/s/$site/stat/device
 }
+unifi_create_admin() {
+    if [ $# -lt 3 ] ; then
+	echo "Usage: $0 <email> <username> <password>"
+	return
+    fi
 
+    uniemail=$1
+    uniusername=$2
+    unipassword=$3
+    ${curl_cmd} --data "{\"cmd\":\"create-admin\", \"email\":\"${uniemail}\", \"name\":\"${uniusername}\", \"permissions\":\"\", \"requires_new_password\":\"true\", \"role\":\"readonly\", \"x_password\":\"${unipassword}\"}" $baseurl/api/s/$site/cmd/sitemgr
+}
+
+unifi_grant_superadmin () {
+    if [ $# -lt 1 ] ; then
+	echo "Usage: $0 accountID"
+	return
+    fi
+
+    superid=$1
+    ${curl_cmd} --data "{\"cmd\":\"grant-super-admin\", \"admin\":\"${superid}\"}" $baseurl/api/s/$site/cmd/sitemgr
+}
 unifi_requires
