@@ -22,6 +22,6 @@ git clone https://github.com/davidmaitland/unifi-voucher-generator.git
 
 ## Run
 
-1. Run `./gen.sh`.
+1. Run `./gen.sh` $time $amount // for example ./gen.sh 100 10  - 100minutes 10 codes. 
 
 2. Open `vouchers.html` and print!

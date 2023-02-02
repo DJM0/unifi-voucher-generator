@@ -143,6 +143,7 @@ unifi_create_voucher() {
     echo "token=$token"
     if [ "$token" != "" ] ; then
         ${curl_cmd} --data "{\"create_time\":${token}}" $baseurl/api/s/$site/stat/voucher
+	echo $token > create.tmp
     fi
 }
 
@@ -154,7 +155,8 @@ unifi_get_vouchers() {
         echo "Usage: $0 [token]"
         return
     fi
-    token=$1
+    n=`cat create.tmp`
+    token=$n
     [ "$token" != "" ] && other_payload="\"create_time\":${token}"
     ${curl_cmd} --data "{${other_payload}}" $baseurl/api/s/$site/stat/voucher
     echo ${curl_cmd} --data "{${other_payload}}" $baseurl/api/s/$site/stat/voucher
