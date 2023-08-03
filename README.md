@@ -22,6 +22,8 @@ git clone https://github.com/davidmaitland/unifi-voucher-generator.git
 
 ## Run
 
-1. Run `./gen.sh` $time $amount // for example ./gen.sh 100 10  - 100minutes 10 codes. 
+1. Run `./gen.sh` $time $amount $note // for example: ./gen.sh 60 10 "sample comment"  -> generates 10 vouchers with a validity of 1h with "sample comment" as name / comment. 
+
+Note: simply running `./gen.sh` without parameters will make use of default values for amount, time and comment that are specified in the script.
 
 2. Open `vouchers.html` and print!
