@@ -15,6 +15,11 @@ if [ -n "$2" ]; then
 else
   amount=10 # New vouchers to generate
 fi
+if [ -n "$3" ]; then
+  note=$3 # Comment / name for the voucher(s)
+else
+  note=$(date +"created %Y-%m-%d %H:%Mh") # Default comment / name for the voucher(s)
+fi
 
 # HTML Settings
 line1="WiFi Voucher"
@@ -22,7 +27,7 @@ line2="Valid for $time minutes"
 
 # Generate vouchers
 unifi_login
-voucherID=`unifi_create_voucher $time $amount $note`
+voucherID=`unifi_create_voucher $time $amount note="$note"`
 unifi_get_vouchers $voucherID > vouchers.tmp
 unifi_logout
 
