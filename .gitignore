@@ -1,1 +1,3 @@
 vouchers.*
+__pycache__/
+*.pyc
